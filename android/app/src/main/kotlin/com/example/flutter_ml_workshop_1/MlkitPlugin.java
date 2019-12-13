@@ -197,7 +197,19 @@ public class MlkitPlugin implements MethodCallHandler {
             ///     1) result.success(...MY DATA HERE...);
             ///     2) result.error("UNAVAILABLE", "Some error", null);
             ///     3) result.notImplemented();
-
+            FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
+            detector.processImage(image).addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
+                @Override
+                public void onSuccess(FirebaseVisionText texts) {
+                    result.success(processTextRecognitionResult(texts));
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // Task failed with an exception
+                    result.error("UNAVAILABLE", e.toString(), null);
+                }
+            });
         } else if (call.method.startsWith("FirebaseVisionBarcodeDetector#detectFrom")) {
             FirebaseVisionBarcodeDetector detector = FirebaseVision.getInstance().getVisionBarcodeDetector();
             detector.detectInImage(image).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionBarcode>>() {
