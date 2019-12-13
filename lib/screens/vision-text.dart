@@ -188,5 +188,19 @@ class _TextDetectPainter extends BoxPainter {
     /// ```
     ///
     /// В самом конце нам нужно обновить весь канвас при помощи метода `restore`
+    final paint = Paint()
+      ..strokeWidth = 2.0
+      ..color = Colors.red
+      ..style = PaintingStyle.stroke;
+
+    final _heightRatio = _originalImageSize.height / configuration.size.height;
+    final _widthRatio = _originalImageSize.width / configuration.size.width;
+    for (var text in _texts) {
+      final _rect = Rect.fromLTRB(offset.dx + text.rect.left / _widthRatio, offset.dy + text.rect.top / _heightRatio,
+          offset.dx + text.rect.right / _widthRatio, offset.dy + text.rect.bottom / _heightRatio);
+      canvas.drawRect(_rect, paint);
+    }
+
+    canvas.restore();
   }
 }
