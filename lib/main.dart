@@ -47,6 +47,12 @@ void main() {
       /// Step 1
       /// Переходы в приложении осуществляются при помощи [Navigator]. Тут нужно проинициализировать 
       /// все пути в приложении для того чтобы мы могли переходить на заданные страницы в приложении
+      '/': (context) => StartScreen(),
+      '/vision-text': (context) => VisionTextWidget(),
+      '/custom-model': (context) => CustomModelWidget(),
+      '/face-detect': (context) => FaceDetectWidget(),
+      '/label-image': (context) => LabelImageWidget(),
+      '/barcode': (context) => BarcodeLabelImageWidget(),
     },
   ));
 }
