@@ -44,8 +44,8 @@ class _VisionTextWidgetState extends State<VisionTextWidget> {
             /// Step 6
             /// Реализуем логику:
             ///   1) делаем новое фото или берём из галереи при помощи [CameraUtil] в которой мы вызываем [ImagePicker].
-            ///   2) Вызываем метод `detectFromPath` асинхронно (для этого существуют ключевые слова `async/await`) 
-            ///       у инстнса [FirebaseVisionTextDetector] который вернёт [List<VisionText>]. В классе [VisionText] 
+            ///   2) Вызываем метод `detectFromPath` асинхронно (для этого существуют ключевые слова `async/await`)
+            ///       у инстнса [FirebaseVisionTextDetector] который вернёт [List<VisionText>]. В классе [VisionText]
             ///       нам понадобится `text` и `rect`.
             ///   3) Вызываем метод `setState` который перересует данный Widget.
           },
@@ -66,6 +66,22 @@ class _VisionTextWidgetState extends State<VisionTextWidget> {
         ///       который возвращает в данном случе [Size] изображения
         ///   2) builder - метод который реализует виджет который будет отрисован в деревеотносительно данных которые придут
         ///       из future метода
+        child: _file == null
+            ? Text('No Image')
+            : FutureBuilder<Size>(
+                future: _getImageSize(Image.file(_file, fit: BoxFit.fitWidth)),
+                builder: (BuildContext context, AsyncSnapshot<Size> snapshot) {
+                  if (snapshot.hasData) {
+                    return Container(
+                        foregroundDecoration: TextDetectDecoration(_currentLabels, snapshot.data),
+                        child: Image.file(_file, fit: BoxFit.fitWidth));
+                  } else {
+                    return LoadingBouncingGrid.square(
+                      backgroundColor: Colors.indigo,
+                    );
+                  }
+                },
+              ),
       ),
     );
   }
@@ -143,16 +159,16 @@ class _TextDetectPainter extends BoxPainter {
     /// Для того чтобы нарисовать прямоугольник, нужно 2 вещи:
     ///   1) [Paint] у которого мы можем задать `color`, `style`, `strokeWidth` и тд.
     ///   2) [Rect] сам прямоугольник
-    /// 
-    /// Так как у нас [List<VisionText>] нам нужно профтись по всем объектам списка и отрисаовать для каждого из них 
-    /// совй бокс. 
-    /// 
+    ///
+    /// Так как у нас [List<VisionText>] нам нужно профтись по всем объектам списка и отрисаовать для каждого из них
+    /// совй бокс.
+    ///
     /// Советую использовать [Rect.fromLTRB]. Для простоты даю формулу по которой будет составлятся прямоугольник
     /// ```
-    /// Rect.fromLTRB(offset.dx + text.rect.left / _widthRatio, offset.dy + text.rect.top / _heightRatio, 
+    /// Rect.fromLTRB(offset.dx + text.rect.left / _widthRatio, offset.dy + text.rect.top / _heightRatio,
     ///   offset.dx + text.rect.right / _widthRatio, offset.dy + text.rect.bottom / _heightRatio)
     /// ```
-    /// 
+    ///
     /// В самом конце нам нужно обновить весь канвас при помощи метода `restore`
   }
 }
