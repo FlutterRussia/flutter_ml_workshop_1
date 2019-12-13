@@ -48,6 +48,24 @@ class _VisionTextWidgetState extends State<VisionTextWidget> {
             ///       у инстнса [FirebaseVisionTextDetector] который вернёт [List<VisionText>]. В классе [VisionText]
             ///       нам понадобится `text` и `rect`.
             ///   3) Вызываем метод `setState` который перересует данный Widget.
+            try {
+              var file = await CameraUtil.pickImage(context, true);
+              if (file != null) {
+                setState(() {
+                  _file = file;
+                });
+                try {
+                  var currentLabels = await FirebaseVisionTextDetector.instance.detectFromPath(_file?.path);
+                  setState(() {
+                    _currentLabels = currentLabels;
+                  });
+                } catch (e) {
+                  print(e.toString());
+                }
+              }
+            } catch (e) {
+              print(e.toString());
+            }
           },
           child: Icon(Icons.camera),
         ),
