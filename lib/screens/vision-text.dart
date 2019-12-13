@@ -34,6 +34,7 @@ class _VisionTextWidgetState extends State<VisionTextWidget> {
               /// Step 4
               /// Обрабатываем возвращение на предыдущий экран
               /// Напоминаю! Это можно реализовать с помощью [Navigator]
+              Navigator.pop(context);
             },
           ),
         ),
