@@ -1,0 +1,28 @@
+name: flutter_ml_worshop_1
+description: A new Flutter project.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  image_picker: ^0.6.2+3
+  camera: ^0.5.7+2  
+  toast: ^0.1.5
+  flutter_image_compress: ^0.6.3
+  image:
+  cupertino_icons: ^0.1.2
+  url_launcher: ^5.2.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+
+flutter:
+
+  uses-material-design: true
+
