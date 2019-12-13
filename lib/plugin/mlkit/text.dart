@@ -78,9 +78,17 @@ class FirebaseVisionTextDetector {
     /// Реализуем бриджинг между Flutter и нативной платформой.
     /// У `_channel` который реализован выше существует метод `invokeMethod` принимающий: [название метода] и
     /// [аргументы].
-    /// 
+    ///
     /// Прошу заметить что вся работа с нативной платформой должна выполнятся асинхронно!
-    /// 
+    ///
     /// После того как нам вернулся от ML список нам нужно его распарсить и вернуть [List<VisionText>].
+    List<dynamic> texts =
+        await _channel.invokeMethod("FirebaseVisionTextDetector#detectFromPath", {'filepath': filepath});
+    List<VisionText> ret = [];
+    texts?.forEach((dynamic item) {
+      final VisionTextBlock text = new VisionTextBlock._(item);
+      ret.add(text);
+    });
+    return ret;
   }
 }
