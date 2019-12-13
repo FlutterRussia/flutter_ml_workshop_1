@@ -143,7 +143,25 @@ public class MlkitPlugin implements MethodCallHandler {
             ///  int rotationAngle = getRotationAngle(in); // <--- Советую глянуть хэтот метод
             ///  Bitmap rotatedBitmap = createRotatedBitmap(bm, bounds, rotationAngle);
 
-         
+            String path = call.argument("filepath");
+            File file = new File(path);
+            BitmapFactory.Options bounds = new BitmapFactory.Options();
+            bounds.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(file.getAbsolutePath(), bounds);
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            Bitmap bm = BitmapFactory.decodeFile(file.getAbsolutePath(), opts);
+
+            try {
+                InputStream in = activity.getContentResolver().openInputStream(Uri.fromFile(file));
+                int rotationAngle = getRotationAngle(in);
+
+                Bitmap rotatedBitmap = createRotatedBitmap(bm, bounds, rotationAngle);
+
+                image = FirebaseVisionImage.fromBitmap(rotatedBitmap);
+            } catch (IOException e) {
+                Log.e("error", e.getMessage());
+                return;
+            }
         } else if (call.method.endsWith("#detectFromBinary")) {
             byte[] bytes = call.argument("binary");
             BitmapFactory.Options bounds = new BitmapFactory.Options();
