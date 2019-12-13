@@ -45,7 +45,7 @@ void main() {
     initialRoute: '/',
     routes: {
       /// Step 1
-      /// Переходы в приложении осуществляются при помощи [Navigator]. Тут нужно проинициализировать 
+      /// Переходы в приложении осуществляются при помощи [Navigator]. Тут нужно проинициализировать
       /// все пути в приложении для того чтобы мы могли переходить на заданные страницы в приложении
       '/': (context) => StartScreen(),
       '/vision-text': (context) => VisionTextWidget(),
@@ -64,9 +64,30 @@ class StartScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('MLKit Workshop'),
       ),
-      body: Container(),
+
       /// Step 3
       /// В место [Container] мы должы реализовать список [CustomCard]
+      body: CustomScrollView(
+        primary: false,
+        slivers: <Widget>[
+          SliverPadding(
+            padding: const EdgeInsets.all(10),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 4,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return CustomCard(list[index]);
+                },
+                childCount: list.length,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
